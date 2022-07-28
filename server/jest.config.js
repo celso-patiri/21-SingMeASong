@@ -11,4 +11,5 @@ export default {
   moduleNameMapper: {
     "^(\\.{1,2}/.*)\\.js$": "$1",
   },
+  setupFiles: ["<rootDir>/test/setup.ts"],
 };
