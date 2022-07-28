@@ -5,6 +5,7 @@ import RandExp from "randexp";
 
 export class RecommendationFactory {
   LinkGenerator: RandExp;
+
   constructor() {
     this.LinkGenerator = new RandExp(youtubeLinkRegex);
   }

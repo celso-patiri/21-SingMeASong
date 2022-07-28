@@ -19,8 +19,10 @@ describe("Recommendations routes integration tests", () => {
     });
 
     it("Should return 409 if recommendation with same name already exists", async () => {
-      const mockRecommendation = factory.registerNewRecommendation();
-      const response = await agent.post(`${BASE_URL}`).send(mockRecommendation);
+      const { name, youtubeLink } = await factory.registerNewRecommendation();
+      const response = await agent
+        .post(`${BASE_URL}`)
+        .send({ name, youtubeLink });
 
       expect(response.statusCode).toBe(409);
     });
@@ -74,7 +76,7 @@ describe("Recommendations routes integration tests", () => {
     });
 
     it("Should return 404 with Recommendation is not found", async () => {
-      const id = factory.randomNumber(20);
+      const id = factory.randomNumber(3);
       const response = await agent.get(`${BASE_URL}/${id}`);
 
       expect(response.statusCode).toBe(404);
@@ -90,7 +92,7 @@ describe("Recommendations routes integration tests", () => {
     });
 
     it("Should return 404 with Recommendation is not found", async () => {
-      const id = factory.randomNumber(20);
+      const id = factory.randomNumber(3);
       const response = await agent.post(`${BASE_URL}/${id}/upvote`);
 
       expect(response.statusCode).toBe(404);
@@ -106,7 +108,7 @@ describe("Recommendations routes integration tests", () => {
     });
 
     it("Should return 404 with Recommendation if not found", async () => {
-      const id = factory.randomNumber(20);
+      const id = factory.randomNumber(3);
       const response = await agent.post(`${BASE_URL}/${id}/downvote`);
 
       expect(response.statusCode).toBe(404);
