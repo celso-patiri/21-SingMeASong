@@ -11,7 +11,7 @@ export class RecommendationFactory {
   }
 
   randomNumber(digits: number) {
-    return faker.random.numeric(digits);
+    return +faker.random.numeric(digits);
   }
 
   newMockRecommendation({ wrongLink = false } = {}) {
@@ -23,6 +23,8 @@ export class RecommendationFactory {
     return {
       name,
       youtubeLink,
+      id: +faker.random.numeric(2),
+      score: +faker.random.numeric(2),
     };
   }
 
@@ -32,5 +34,9 @@ export class RecommendationFactory {
       data: { name, youtubeLink },
     });
     return { id, name, youtubeLink };
+  }
+
+  generateNMocks(n: number) {
+    return Array(n).map(() => this.newMockRecommendation());
   }
 }
