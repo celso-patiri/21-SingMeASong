@@ -9,6 +9,8 @@ describe("Recommendations routes integration tests", () => {
   const factory = new RecommendationFactory();
   const BASE_URL = "/recommendations";
 
+  console.log(process.env.DATABASE_URL);
+
   describe(`POST ${BASE_URL}`, () => {
     it("Should return 422 if youtubeLink is invalid", async () => {
       const response = await agent
