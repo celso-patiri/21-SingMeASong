@@ -65,7 +65,7 @@ describe("Recommendations routes integration tests", () => {
 
   describe(`GET ${BASE_URL}/top/:amount`, () => {
     it("Should return 200 with :amount recommendations array", async () => {
-      const amount = factory.randomNumber(2);
+      const amount = factory.randomInt(1, 10);
       const response = await agent.get(`${BASE_URL}/top/${amount}`);
 
       expect(response.statusCode).toBe(200);
@@ -85,7 +85,7 @@ describe("Recommendations routes integration tests", () => {
     });
 
     it("Should return 404 with Recommendation is not found", async () => {
-      const id = factory.randomNumber(3);
+      const id = factory.randomInt(1, 100);
       const response = await agent.get(`${BASE_URL}/${id}`);
 
       expect(response.statusCode).toBe(404);
@@ -101,7 +101,7 @@ describe("Recommendations routes integration tests", () => {
     });
 
     it("Should return 404 with Recommendation is not found", async () => {
-      const id = factory.randomNumber(3);
+      const id = factory.randomInt(1, 100);
       const response = await agent.post(`${BASE_URL}/${id}/upvote`);
 
       expect(response.statusCode).toBe(404);
@@ -117,7 +117,7 @@ describe("Recommendations routes integration tests", () => {
     });
 
     it("Should return 404 with Recommendation if not found", async () => {
-      const id = factory.randomNumber(3);
+      const id = factory.randomInt(1, 100);
       const response = await agent.post(`${BASE_URL}/${id}/downvote`);
 
       expect(response.statusCode).toBe(404);

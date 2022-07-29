@@ -10,11 +10,14 @@ export class RecommendationFactory {
     this.LinkGenerator = new RandExp(youtubeLinkRegex);
   }
 
-  randomNumber(digits: number) {
-    return +faker.random.numeric(digits);
+  randomInt(min: number, max: number) {
+    return Math.floor(Math.random() * (max - min + 1) + min);
   }
 
-  newMockRecommendation({ wrongLink = false } = {}) {
+  newMockRecommendation({
+    wrongLink = false,
+    score = this.randomInt(1, 10),
+  } = {}) {
     let name = faker.internet.userName();
     let youtubeLink = this.LinkGenerator.gen();
 
@@ -24,7 +27,7 @@ export class RecommendationFactory {
       name,
       youtubeLink,
       id: +faker.random.numeric(2),
-      score: +faker.random.numeric(2),
+      score,
     };
   }
 
