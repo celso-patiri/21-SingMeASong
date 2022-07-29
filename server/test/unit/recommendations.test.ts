@@ -88,11 +88,29 @@ describe("recomendations services unit tests", () => {
         .spyOn(recommendationRepository, "updateScore")
         .mockResolvedValueOnce(mockRecommendation);
 
+      await recommendationService.downvote(mockRecommendation.id);
+
+      expect(recommendationRepository.updateScore).toHaveBeenCalled();
+    });
+
+    it("should call recommendationsRepository.remove if score is less than 5", async () => {
+      const mockRecommendation = factory.newMockRecommendation({ score: -6 });
+      jest
+        .spyOn(recommendationRepository, "find")
+        .mockResolvedValueOnce(mockRecommendation);
+
+      jest
+        .spyOn(recommendationRepository, "updateScore")
+        .mockResolvedValueOnce(mockRecommendation);
+
       jest
         .spyOn(recommendationRepository, "remove")
         .mockImplementationOnce(async () => {});
 
       await recommendationService.downvote(mockRecommendation.id);
+
+      expect(recommendationRepository.updateScore).toHaveBeenCalled();
+      expect(recommendationRepository.remove).toHaveBeenCalled();
     });
   });
 
@@ -122,26 +140,49 @@ describe("recomendations services unit tests", () => {
     });
 
     it("should return random object in array of recommendations", async () => {
-      const mockRecommendations = factory.generateNMocks(
-        factory.randomNumber(1)
-      );
-      jest
-        .spyOn(recommendationRepository, "findAll")
-        .mockResolvedValueOnce(mockRecommendations);
+      Array(10).forEach(async () => {
+        const mockRecommendations = factory.generateNMocks(
+          factory.randomInt(1, 10)
+        );
+        jest
+          .spyOn(recommendationRepository, "findAll")
+          .mockResolvedValueOnce(mockRecommendations);
 
-      const recommendation = await recommendationService.getRandom();
-      expect(mockRecommendations).toContain(recommendation);
+        const recommendation = await recommendationService.getRandom();
+
+        expect(mockRecommendations).toContain(recommendation);
+      });
     });
   });
 
   describe("get", () => {
     it("should call recommendationRepository.findAll", async () => {
+      const mockRecommedations = factory.generateNMocks(
+        factory.randomInt(1, 10)
+      );
       jest
         .spyOn(recommendationRepository, "findAll")
-        .mockImplementationOnce(async () => []);
+        .mockResolvedValueOnce(mockRecommedations);
 
-      const recommendation = await recommendationService.getRandom();
-      expect(mockRecommendations).toContain(recommendation);
+      const result = await recommendationService.get();
+
+      expect(recommendationRepository.findAll).toHaveBeenCalled();
+      expect(result).toEqual(mockRecommedations);
+    });
+  });
+
+  describe("getTop", () => {
+    it("should call recommendationRepository.findAll", async () => {
+      const amount = factory.randomInt(1, 10);
+      const mockRecommedations = factory.generateNMocks(amount);
+      jest
+        .spyOn(recommendationRepository, "getAmountByScore")
+        .mockResolvedValueOnce(mockRecommedations);
+
+      const result = await recommendationService.getTop(amount);
+
+      expect(recommendationRepository.getAmountByScore).toHaveBeenCalled();
+      expect(result).toEqual(mockRecommedations);
     });
   });
 });
