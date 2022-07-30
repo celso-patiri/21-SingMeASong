@@ -7,8 +7,9 @@
   "scripts": {
     "start": "node dist/src/index.js",
     "dev": "nodemon src/server.ts",
-    "pg:migrate": "yarn dotenv -e .env.test prisma migrate dev",
-    "test": "yarn pg:migrate && yarn jest --coverage -i"
+    "dev:test": "yarn dotenv -e .env.test nodemon src/server.ts",
+    "test:dbmigrate": "yarn dotenv -e .env.test prisma migrate dev",
+    "test": "yarn test:dbmigrate && yarn jest --coverage -i"
   },
   "keywords": [],
   "author": "",
