@@ -139,19 +139,34 @@ describe("recomendations services unit tests", () => {
       expect(recommendation).toEqual(mockRecommendation);
     });
 
-    it("should return random object in array of recommendations", async () => {
-      Array(10).forEach(async () => {
-        const mockRecommendations = factory.generateNMocks(
-          factory.randomInt(1, 10)
-        );
-        jest
-          .spyOn(recommendationRepository, "findAll")
-          .mockResolvedValueOnce(mockRecommendations);
+    it("should return object in array with random greater than 0.7", async () => {
+      const mockRecommendations = factory.generateNMocks(
+        factory.randomInt(1, 10)
+      );
+      jest
+        .spyOn(recommendationRepository, "findAll")
+        .mockResolvedValueOnce(mockRecommendations);
 
-        const recommendation = await recommendationService.getRandom();
+      jest.spyOn(Math, "random").mockReturnValueOnce(0.8);
 
-        expect(mockRecommendations).toContain(recommendation);
-      });
+      const recommendation = await recommendationService.getRandom();
+
+      expect(mockRecommendations).toContain(recommendation);
+    });
+
+    it("should return object in array with random lte to 0.7", async () => {
+      const mockRecommendations = factory.generateNMocks(
+        factory.randomInt(1, 10)
+      );
+      jest
+        .spyOn(recommendationRepository, "findAll")
+        .mockResolvedValueOnce(mockRecommendations);
+
+      jest.spyOn(Math, "random").mockReturnValueOnce(0.6);
+
+      const recommendation = await recommendationService.getRandom();
+
+      expect(mockRecommendations).toContain(recommendation);
     });
   });
 
