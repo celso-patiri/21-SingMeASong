@@ -45,7 +45,7 @@ Cypress.Commands.add("generateSongs", (filename) => {
 });
 
 Cypress.Commands.add("createRecommendation", () => {
-  cy.visit("localhost:3000");
+  cy.visit("");
   const recommendationName = faker.lorem.words(3);
 
   cy.get("#song-name").type(recommendationName);
